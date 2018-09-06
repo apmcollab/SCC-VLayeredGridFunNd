@@ -543,7 +543,7 @@ void inputFromDataFile(SCC::VLayeredGridFun3d& gF, FILE* dataFile, string fileNa
     throw std::runtime_error("\nVLayeredGridFun3d could not be initialized from file " + fileName + " \n");
     }
 
-    gF.initialize(layerCount,xPanels,xMin,xMax,yPanels,yMin,yMax,zPanels,zBdrys);
+    gF.initialize(xPanels,xMin,xMax,yPanels,yMin,yMax,layerCount,zPanels,zBdrys);
 
     for(long n = 0; n < layerCount; n++)
     {
@@ -721,7 +721,7 @@ void inputFromBinaryDataFile(SCC::VLayeredGridFun3d& gF, FILE* dataFile, string 
     }
 
 
-	gF.initialize(layerCount,xPanels,xMin,xMax,yPanels,yMin,yMax,zPanels,zBdrys);
+	gF.initialize(xPanels,xMin,xMax,yPanels,yMin,yMax,layerCount,zPanels,zBdrys);
 
 	for(long n = 0; n < layerCount; n++)
 	{

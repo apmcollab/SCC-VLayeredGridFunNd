@@ -568,7 +568,7 @@ void inputFromDataFile(SCC::VLayeredGridFun2d& gF, FILE* dataFile, string fileNa
 	}
 
 
-    gF.initialize(layerCount,xPanels,xMin,xMax,zPanels,zBdrys);
+    gF.initialize(xPanels,xMin,xMax,layerCount,zPanels,zBdrys);
 
     for(long n = 0; n < layerCount; n++)
     {
@@ -713,7 +713,7 @@ void inputFromBinaryDataFile(SCC::VLayeredGridFun2d& gF, FILE* dataFile, string 
 	rValue = fread(&xMax,      sizeof(double), 1, dataFile) != 1 ? 1 : rValue;
     rValue = fread(&zBdrys[0], sizeof(double), layerCount+1, dataFile) != (uint)(layerCount+1) ? 1 : rValue;
 
-	gF.initialize(layerCount,xPanels,xMin,xMax,zPanels,zBdrys);
+	gF.initialize(xPanels,xMin,xMax,layerCount,zPanels,zBdrys);
 
 	for(long n = 0; n < layerCount; n++)
 	{

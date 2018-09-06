@@ -45,6 +45,8 @@
 using namespace std;
 
 #include "GridFunctionNd/SCC_GridFunction3d.h"
+#include "GridFunctionNd/SCC_GridFunction2d.h"
+#include "GridFunctionNd/SCC_GridFunction1d.h"
 
 namespace SCC
 {
@@ -59,11 +61,11 @@ VLayeredGridFun3d()
 	initialize();
 }
 
-VLayeredGridFun3d(long layerCount, long xPanels, double xMin, double xMax,
-		                                long yPanels, double yMin, double yMax,
-										vector<long>& zPanels, const vector<double>& zBdrys)
+VLayeredGridFun3d(long xPanels,    double xMin, double xMax,
+		          long yPanels,    double yMin, double yMax,
+				  long layerCount, const vector<long>& zPanels, const vector<double>& zBdrys)
 {
-    initialize(layerCount,xPanels,xMin,xMax,yPanels,yMin,yMax, zPanels,zBdrys);
+    initialize(xPanels,xMin,xMax,yPanels,yMin,yMax,layerCount,zPanels,zBdrys);
 }
 
 VLayeredGridFun3d(const VLayeredGridFun3d& M)
@@ -110,9 +112,9 @@ void initialize(const VLayeredGridFun3d& M)
     zPanels    = M.zPanels;
 }
 
-void initialize(long layerCount, long xPanels, double xMin, double xMax,
-		                         long yPanels, double yMin, double yMax,
-			  const vector<long>& zPanels, const vector<double>& zBdrys)
+void initialize(long xPanels, double xMin, double xMax,
+		        long yPanels, double yMin, double yMax,
+			    long layerCount, const vector<long>& zPanels, const vector<double>& zBdrys)
 {
     initialize();
 
@@ -227,7 +229,7 @@ VLayeredGridFun3d  extractLayers(long begIndex, long endIndex) const
 		zBd[k-begIndex+1] = layer[k].getXmax();
 	}
 
-   VLayeredGridFun3d R(lcount,xPanels,xMin,xMax,yPanels,yMin,yMax,zPn,zBd);
+   VLayeredGridFun3d R(xPanels,xMin,xMax,yPanels,yMin,yMax,lcount,zPn,zBd);
 
    for(long k = begIndex; k <= endIndex; k++)
    {
@@ -246,6 +248,87 @@ void  insertLayers(long begIndex, long endIndex, const VLayeredGridFun3d& V)
    }
 }
 
+
+void createProductFunction(const GridFunction1d& funX, const GridFunction1d& funY, const VLayeredGridFun1d& funZ)
+{
+    initialize(funX.xPanels, funX.xMin, funX.xMax,
+               funY.xPanels, funY.xMin, funY.xMax,
+               funZ.layerCount, funZ.zPanels, funZ.zBdrys);
+
+	long i; long j; long k; long p;
+
+	double fX; double fY; double fZ;
+
+	for(p = 0; p < layerCount; p++)
+	{
+
+	for(i = 0; i <= xPanels; i++)
+	{
+	fX = funX(i);
+	for(j = 0; j <= yPanels; j++)
+	{
+	fY = funY(j);
+	for(k = 0; k <= zPanels[p]; k++)
+	{
+			fZ = funZ.layer[p](k);
+			layer[p](i,j,k) = fX*fY*fZ;
+	}}}
+
+	}
+}
+
+void createProductFunction(const GridFunction2d& funXY,  const VLayeredGridFun1d& funZ)
+{
+    initialize(funXY.xPanels, funXY.xMin, funXY.xMax,
+               funXY.yPanels, funXY.yMin, funXY.yMax,
+               funZ.layerCount, funZ.zPanels, funZ.zBdrys);
+
+	long i; long j; long k; long p;
+
+	double fXY; double fZ;
+
+	for(p = 0; p < layerCount; p++)
+	{
+
+	for(i = 0; i <= xPanels; i++)
+	{
+    for(j = 0; j <= yPanels; j++)
+	{
+	fXY = funXY.Values(i,j);
+	for(k = 0; k <= zPanels[p]; k++)
+	{
+	fZ = funZ.layer[p](k);
+
+	layer[p](i,j,k) = fXY*fZ;
+	}}}
+
+	}
+}
+
+void createProductFunction(const GridFunction1d& funX,const  VLayeredGridFun2d& funYZ)
+{
+    initialize(funX.xPanels,  funX.xMin,  funX.xMax,
+               funYZ.xPanels, funYZ.xMin, funYZ.xMax,
+               funYZ.layerCount, funYZ.zPanels, funYZ.zBdrys);
+
+	long i; long j; long k; long p;
+	double fX; double fYZ;
+
+	for(p = 0; p < layerCount; p++)
+	{
+	for(i = 0; i <= xPanels; i++)
+	{
+	fX = funX(i);
+	for(j = 0; j <= yPanels; j++)
+	{
+	for(k = 0; k <= zPanels[p]; k++)
+	{
+	fYZ = funYZ.layer[p](j,k);
+	layer[p](i,j,k) = fX*fYZ;
+	}}}
+
+	}
+}
 void  incrementLayers(long begIndex, long endIndex, const VLayeredGridFun3d& V)
 {
    for(long k = begIndex; k <= endIndex; k++)
@@ -254,6 +337,87 @@ void  incrementLayers(long begIndex, long endIndex, const VLayeredGridFun3d& V)
    }
 }
 
+GridFunction2d getConstantZslice(long layerIndex, long zIndex) const //(x-y function)
+{
+    GridFunction2d R(xPanels,xMin,xMax,yPanels,yMin,yMax);
+    for(long i = 0; i <= xPanels; i++)
+    {
+    for(long j = 0; j <= yPanels; j++)
+    {
+    R.Values(i,j) = layer[layerIndex](i,j,zIndex);
+    }}
+    return R;
+}
+
+VLayeredGridFun2d getConstantYslice(long yIndex) const //(x-z function)
+{
+	VLayeredGridFun2d R(xPanels,xMin,xMax,layerCount,zPanels,zBdrys);
+
+	for(long p = 0; p < layerCount; p++)
+	{
+		for(long i = 0; i <= xPanels; i++)
+		{
+			for(long k = 0; k <= zPanels[p]; k++)
+			{
+				R.layer[p](i,k) = layer[p](i,yIndex,k);
+		}   }
+    }
+    return R;
+}
+
+VLayeredGridFun2d getConstantXslice(long xIndex) const //(y-z function)
+{
+	VLayeredGridFun2d R(yPanels,yMin,yMax,layerCount,zPanels,zBdrys);
+
+	for(long p = 0; p < layerCount; p++)
+	{
+		for(long j = 0; j <= yPanels; j++)
+		{
+			for(long k = 0; k <= zPanels[p]; k++)
+			{
+				R.layer[p](j,k) = layer[p](xIndex,j,k);
+			}
+		}
+    }
+    return R;
+}
+
+GridFunction1d getConstantYZslice(long yIndex, long layerIndex, long zIndex) const  // (x function)
+{
+	GridFunction1d R(xPanels,xMin,xMax);
+
+	for(long i = 0; i <= xPanels; i++)
+	{
+	R.Values(i) = layer[layerIndex](i,yIndex,zIndex);
+	}
+	return R;
+}
+
+GridFunction1d getConstantXZslice(long xIndex, long layerIndex, long zIndex) const  //( y function)
+{
+	GridFunction1d R(yPanels,yMin,yMax);
+
+	for(long j = 0; j <= yPanels; j++)
+	{
+	R.Values(j) = layer[layerIndex](xIndex,j,zIndex);
+	}
+	return R;
+}
+
+VLayeredGridFun1d getConstantXYslice(long xIndex, long yIndex) const  //( z function)
+{
+
+	VLayeredGridFun1d R(layerCount, zPanels,zBdrys);
+
+	for(long p = 0; p < layerCount; p++)
+	{
+		for(long k = 0; k <= zPanels[p]; k++)
+		{
+			R.layer[p](k) = layer[p](xIndex,yIndex,k);
+		}
+	}
+	return R;
+}
 
 long getLayerCount() const
 {

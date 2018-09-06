@@ -64,10 +64,10 @@ VLayeredGridFun2d()
 	initialize();
 }
 
-VLayeredGridFun2d(long layerCount, long xPanels, double xMin, double xMax,
-				 vector<long>& zPanels, const vector<double>& zBdrys)
+VLayeredGridFun2d(long xPanels, double xMin, double xMax,
+				  long layerCount, const vector<long>& zPanels, const vector<double>& zBdrys)
 {
-    initialize(layerCount,xPanels,xMin,xMax,zPanels,zBdrys);
+    initialize(xPanels,xMin,xMax,layerCount,zPanels,zBdrys);
 }
 
 VLayeredGridFun2d(const VLayeredGridFun2d& M)
@@ -104,8 +104,8 @@ void initialize(const VLayeredGridFun2d& M)
     zPanels    = M.zPanels;
 }
 
-void initialize(long layerCount, long xPanels, double xMin, double xMax,
-			  const vector<long>& zPanels, const vector<double>& zBdrys)
+void initialize(long xPanels, double xMin, double xMax,
+			    long layerCount, const vector<long>& zPanels, const vector<double>& zBdrys)
 {
     initialize();
 
@@ -212,7 +212,7 @@ VLayeredGridFun2d  extractLayers(long begIndex, long endIndex) const
 		zBd[k-begIndex+1] = layer[k].getXmax();
 	}
 
-   VLayeredGridFun2d R(lcount,xPanels,xMin,xMax,zPn,zBd);
+   VLayeredGridFun2d R(xPanels,xMin,xMax,lcount,zPn,zBd);
 
    for(long k = begIndex; k <= endIndex; k++)
    {
@@ -237,6 +237,55 @@ void  incrementLayers(long begIndex, long endIndex, const VLayeredGridFun2d& V)
    {
    layer[k] += V.layer[k-begIndex];
    }
+}
+
+VLayeredGridFun1d getConstantXslice(long xIndex) const //( z function)
+{
+	VLayeredGridFun1d R(layerCount,zPanels,zBdrys);
+
+	for(long p = 0; p < layerCount; p++)
+	{
+		for(long k = 0; k <= zPanels[p]; k++)
+		{
+				R.layer[p](k) = layer[p](xIndex,k);
+		}
+    }
+    return R;
+}
+
+GridFunction1d getConstantZslice(long layerIndex, long zIndex) const //(x function)
+{
+    GridFunction1d R(xPanels,xMin,xMax);
+    for(long i = 0; i <= xPanels; i++)
+    {
+    R.Values(i) = layer[layerIndex](i,zIndex);
+    }
+    return R;
+}
+
+
+void createProductFunction(const GridFunction1d& funX, const VLayeredGridFun1d& funZ)
+{
+    initialize(funX.xPanels, funX.xMin, funX.xMax,
+               funZ.layerCount, funZ.zPanels, funZ.zBdrys);
+
+	long i; long j; long p;
+
+	double fX; double fZ;
+
+	for(p = 0; p < layerCount; p++)
+	{
+
+	for(i = 0; i <= xPanels; i++)
+	{
+	fX = funX(i);
+	for(j = 0; j <= zPanels[p]; j++)
+	{
+	fZ = funZ.layer[p](j);
+	layer[p](i,j) = fX*fZ;
+	}}
+
+	}
 }
 
 

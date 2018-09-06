@@ -59,7 +59,7 @@ VLayeredGridFun1d()
 	initialize();
 }
 
-VLayeredGridFun1d(long layerCount, vector<long>& zPanels, const vector<double>& zBdrys)
+VLayeredGridFun1d(long layerCount, const vector<long>& zPanels, const vector<double>& zBdrys)
 {
     initialize(layerCount,zPanels,zBdrys);
 }
