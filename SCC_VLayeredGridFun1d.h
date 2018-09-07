@@ -9,6 +9,11 @@
    z-coordinate being the vertical direction  <p>
    Indexing for the layers starts at 0.
 
+
+   The coordinate for the SCC::GridFunction1d instances that comprise
+   the layers is x, so the coordinate labels used when accessing the
+   layers individually has to accommdodate this difference.
+
 */
 //####################################################################
 // Chris Anderson (C) UCLA                            August 31, 2018
@@ -129,10 +134,28 @@ vector<double> getZbdrys() const
 	return zBdrys;
 }
 
+double getZmin() const
+{return layer[0].getXmin();}
+
+double getZmax() const
+{return layer[layerCount-1].getXmax();}
+
+
 vector<long> getZpanels() const
 {
 	return zPanels;
 }
+
+long getZpanelCountSum() const
+{
+	long panelSum = 0;
+	for(long k = 0; k < layerCount; k++)
+	{
+		panelSum += layer[k].getXpanelCount();
+	}
+	return panelSum;
+}
+
 
 
 // Two structures are equal if they have the same number of

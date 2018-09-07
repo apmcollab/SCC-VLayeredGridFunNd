@@ -8,11 +8,14 @@
    to represented a layered structure stacked "vertically" with the 
    z-coordinate being the vertical direction  <p>
 
-   Each layer consists of an SCC::GridFunction2d instance whose
+   Indexing for the layers starts at 0.
+
+   The coordinates for the SCC::GridFunction2d instances that comprise
+   the layers are (x,y), so the coordinate labels used when accessing the
+   layers individually has to accommodate this difference. Specifically,
+   each layer consists of an SCC::GridFunction2d instance whose
    y-coordinate then becomes the z-coordinate of the layer in
    the layered structure.
-
-   Indexing for the layers starts at 0.
 
 */
 //####################################################################
@@ -203,13 +206,13 @@ VLayeredGridFun2d  extractLayers(long begIndex, long endIndex) const
 
 	for(long k = begIndex; k <= endIndex; k++)
 	{
-		zPn[k-begIndex] = layer[k].getXpanelCount();
+		zPn[k-begIndex] = layer[k].getYpanelCount();
 	}
 
-	zBd[0] = layer[begIndex].getXmin();
+	zBd[0] = layer[begIndex].getYmin();
 	for(long k = begIndex; k <= endIndex; k++)
 	{
-		zBd[k-begIndex+1] = layer[k].getXmax();
+		zBd[k-begIndex+1] = layer[k].getYmax();
 	}
 
    VLayeredGridFun2d R(xPanels,xMin,xMax,lcount,zPn,zBd);
@@ -304,9 +307,10 @@ vector<long> getZpanels() const
 	return zPanels;
 }
 
-double getXmin() const {return xMin;}
-double getXmax() const {return xMax;}
-double getHx()   const {return xWidth/(double)xPanels;}
+double getXmin()      const {return xMin;}
+double getXmax()      const {return xMax;}
+double getHx()        const {return xWidth/(double)xPanels;}
+long getXpanelCount() const {return xPanels;}
 
 
 double getZmin() const
@@ -314,8 +318,6 @@ double getZmin() const
 
 double getZmax() const
 {return layer[layerCount-1].getYmax();}
-
-long getXpanelCount() const {return xPanels;}
 
 
 long getZpanelCountSum() const

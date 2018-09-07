@@ -180,7 +180,7 @@ void outputDataToVTKfile(const SCC::VLayeredGridFun3d& gridFun, const string& fi
             }
 
 
-        	for(k = 0;  k < zPanels[n]; k++)
+        	for(k = 1;  k < zPanels[n]; k++)
         	{
         		for(j = 0; j < nPt; j++)
         		{
