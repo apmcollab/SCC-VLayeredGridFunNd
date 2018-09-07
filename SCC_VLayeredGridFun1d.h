@@ -348,6 +348,38 @@ VLayeredGridFun1d operator+(const VLayeredGridFun1d& M)
 
 }
 
+void operator*=(const std::function<double(double)>& F)
+{
+    for(long i = 0; i < layerCount; i++)
+    {
+    layer[i] *=F;
+    }
+}
+
+void operator/=(const std::function<double(double)>& F)
+{
+    for(long i = 0; i < layerCount; i++)
+    {
+    layer[i] /=F;
+    }
+}
+
+void operator+=(const std::function<double(double)>& F)
+{
+    for(long i = 0; i < layerCount; i++)
+    {
+    layer[i] +=F;
+    }
+}
+
+void operator-=(const std::function<double(double)>& F)
+{
+    for(long i = 0; i < layerCount; i++)
+    {
+    layer[i] -=F;
+    }
+}
+
 void squareValues()
 {
 //
