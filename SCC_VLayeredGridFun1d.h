@@ -87,7 +87,18 @@ void initialize()
 void initialize(const VLayeredGridFun1d& M)
 {
     layerCount = M.layerCount;
-	layer      = M.layer;
+
+    // Can't use vector = for layer because the bounds checking
+    // of the underlying arrays inhibits initializing with an
+    // instance of a different size
+
+    layer.clear();
+    layer.resize(layerCount);
+    for(long k = 0; k < layerCount; k++)
+    {
+    	layer[k].initialize(M.layer[k]);
+	}
+
     zWidth     = M.zWidth;
     zBdrys     = M.zBdrys;
     zPanels    = M.zPanels;
