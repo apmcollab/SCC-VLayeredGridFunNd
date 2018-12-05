@@ -54,6 +54,9 @@ using namespace std;
 #include "GridFunctionNd/SCC_GridFunction2d.h"
 #include "GridFunctionNd/SCC_GridFunction1d.h"
 
+#include "SCC_VLayeredGridFun1d.h"
+#include "SCC_VLayeredGridFun2d.h"
+
 namespace SCC
 {
 
@@ -354,6 +357,10 @@ void  incrementLayers(long begIndex, long endIndex, const VLayeredGridFun3d& V)
    }
 }
 
+// The following slice routines are not thread safe, i.e.
+// multiple threads invoking these slice member functions
+// on the same object isn't safe.
+
 GridFunction2d getConstantZslice(long layerIndex, long zIndex) const //(x-y function)
 {
     GridFunction2d R(xPanels,xMin,xMax,yPanels,yMin,yMax);
@@ -365,6 +372,7 @@ GridFunction2d getConstantZslice(long layerIndex, long zIndex) const //(x-y func
     }}
     return R;
 }
+
 
 VLayeredGridFun2d getConstantYslice(long yIndex) const //(x-z function)
 {
@@ -381,6 +389,7 @@ VLayeredGridFun2d getConstantYslice(long yIndex) const //(x-z function)
     }
     return R;
 }
+
 
 VLayeredGridFun2d getConstantXslice(long xIndex) const //(y-z function)
 {
@@ -399,6 +408,7 @@ VLayeredGridFun2d getConstantXslice(long xIndex) const //(y-z function)
     return R;
 }
 
+
 GridFunction1d getConstantYZslice(long yIndex, long layerIndex, long zIndex) const  // (x function)
 {
 	GridFunction1d R(xPanels,xMin,xMax);
@@ -409,6 +419,7 @@ GridFunction1d getConstantYZslice(long yIndex, long layerIndex, long zIndex) con
 	}
 	return R;
 }
+
 
 GridFunction1d getConstantXZslice(long xIndex, long layerIndex, long zIndex) const  //( y function)
 {
@@ -435,6 +446,20 @@ VLayeredGridFun1d getConstantXYslice(long xIndex, long yIndex) const  //( z func
 	}
 	return R;
 }
+
+void  setConstantXYslice(long xIndex, long yIndex, const VLayeredGridFun1d& R) //( z function)
+{
+
+	for(long p = 0; p < layerCount; p++)
+	{
+		for(long k = 0; k <= zPanels[p]; k++)
+		{
+			layer[p](xIndex,yIndex,k) = R.layer[p](k);
+		}
+	}
+
+}
+
 
 long getLayerCount() const
 {
