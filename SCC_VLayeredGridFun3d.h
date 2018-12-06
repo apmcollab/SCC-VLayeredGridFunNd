@@ -357,10 +357,6 @@ void  incrementLayers(long begIndex, long endIndex, const VLayeredGridFun3d& V)
    }
 }
 
-// The following slice routines are not thread safe, i.e.
-// multiple threads invoking these slice member functions
-// on the same object isn't safe.
-
 GridFunction2d getConstantZslice(long layerIndex, long zIndex) const //(x-y function)
 {
     GridFunction2d R(xPanels,xMin,xMax,yPanels,yMin,yMax);
@@ -371,6 +367,26 @@ GridFunction2d getConstantZslice(long layerIndex, long zIndex) const //(x-y func
     R.Values(i,j) = layer[layerIndex](i,j,zIndex);
     }}
     return R;
+}
+
+void getConstantZslice(long layerIndex, long zIndex,GridFunction2d& R) const //(x-y function)
+{
+    for(long i = 0; i <= xPanels; i++)
+    {
+    for(long j = 0; j <= yPanels; j++)
+    {
+    R.Values(i,j) = layer[layerIndex](i,j,zIndex);
+    }}
+}
+
+void setConstantZslice(long layerIndex, long zIndex, const GridFunction2d& R)  //(x-y function)
+{
+    for(long i = 0; i <= xPanels; i++)
+    {
+    for(long j = 0; j <= yPanels; j++)
+    {
+    layer[layerIndex](i,j,zIndex) = R.Values(i,j);
+    }}
 }
 
 
@@ -388,6 +404,32 @@ VLayeredGridFun2d getConstantYslice(long yIndex) const //(x-z function)
 		}   }
     }
     return R;
+}
+
+void getConstantYslice(long yIndex,VLayeredGridFun2d& R) const //(x-z function)
+{
+	for(long p = 0; p < layerCount; p++)
+	{
+		for(long i = 0; i <= xPanels; i++)
+		{
+			for(long k = 0; k <= zPanels[p]; k++)
+			{
+				R.layer[p](i,k) = layer[p](i,yIndex,k);
+		}   }
+    }
+}
+
+void setConstantYslice(long yIndex,const VLayeredGridFun2d& R)  //(x-z function)
+{
+	for(long p = 0; p < layerCount; p++)
+	{
+		for(long i = 0; i <= xPanels; i++)
+		{
+			for(long k = 0; k <= zPanels[p]; k++)
+			{
+				layer[p](i,yIndex,k) = R.layer[p](i,k);
+		}   }
+    }
 }
 
 
@@ -408,6 +450,34 @@ VLayeredGridFun2d getConstantXslice(long xIndex) const //(y-z function)
     return R;
 }
 
+void getConstantXslice(long xIndex,VLayeredGridFun2d& R) const //(y-z function)
+{
+	for(long p = 0; p < layerCount; p++)
+	{
+		for(long j = 0; j <= yPanels; j++)
+		{
+			for(long k = 0; k <= zPanels[p]; k++)
+			{
+				R.layer[p](j,k) = layer[p](xIndex,j,k);
+			}
+		}
+    }
+}
+
+void setConstantXslice(long xIndex,const VLayeredGridFun2d& R)  //(y-z function)
+{
+	for(long p = 0; p < layerCount; p++)
+	{
+		for(long j = 0; j <= yPanels; j++)
+		{
+			for(long k = 0; k <= zPanels[p]; k++)
+			{
+				layer[p](xIndex,j,k) = R.layer[p](j,k);
+			}
+		}
+    }
+}
+
 
 GridFunction1d getConstantYZslice(long yIndex, long layerIndex, long zIndex) const  // (x function)
 {
@@ -418,6 +488,22 @@ GridFunction1d getConstantYZslice(long yIndex, long layerIndex, long zIndex) con
 	R.Values(i) = layer[layerIndex](i,yIndex,zIndex);
 	}
 	return R;
+}
+
+void getConstantYZslice(long yIndex, long layerIndex, long zIndex,GridFunction1d& R) const  // (x function)
+{
+	for(long i = 0; i <= xPanels; i++)
+	{
+	R.Values(i) = layer[layerIndex](i,yIndex,zIndex);
+	}
+}
+
+void setConstantYZslice(long yIndex, long layerIndex, long zIndex,const GridFunction1d& R) // (x function)
+{
+	for(long i = 0; i <= xPanels; i++)
+	{
+	layer[layerIndex](i,yIndex,zIndex) = R.Values(i);
+	}
 }
 
 
@@ -432,6 +518,23 @@ GridFunction1d getConstantXZslice(long xIndex, long layerIndex, long zIndex) con
 	return R;
 }
 
+void getConstantXZslice(long xIndex, long layerIndex, long zIndex,GridFunction1d& R) const  //( y function)
+{
+	for(long j = 0; j <= yPanels; j++)
+	{
+	R.Values(j) = layer[layerIndex](xIndex,j,zIndex);
+	}
+}
+
+void setConstantXZslice(long xIndex, long layerIndex, long zIndex, const GridFunction1d& R)   //( y function)
+{
+	for(long j = 0; j <= yPanels; j++)
+	{
+	layer[layerIndex](xIndex,j,zIndex) = R.Values(j);
+	}
+}
+
+
 VLayeredGridFun1d getConstantXYslice(long xIndex, long yIndex) const  //( z function)
 {
 
@@ -445,6 +548,17 @@ VLayeredGridFun1d getConstantXYslice(long xIndex, long yIndex) const  //( z func
 		}
 	}
 	return R;
+}
+
+void getConstantXYslice(long xIndex, long yIndex,VLayeredGridFun1d& R) const  //( z function)
+{
+	for(long p = 0; p < layerCount; p++)
+	{
+		for(long k = 0; k <= zPanels[p]; k++)
+		{
+			R.layer[p](k) = layer[p](xIndex,yIndex,k);
+		}
+	}
 }
 
 void  setConstantXYslice(long xIndex, long yIndex, const VLayeredGridFun1d& R) //( z function)
