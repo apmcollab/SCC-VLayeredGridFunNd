@@ -255,10 +255,6 @@ void  incrementLayers(long begIndex, long endIndex, const VLayeredGridFun2d& V)
 }
 
 
-// The following slice routines are not thread safe, i.e.
-// multiple threads invoking these slice member functions
-// on the same object isn't safe.
-
 
 VLayeredGridFun1d getConstantXslice(long xIndex) const //( z function)
 {
@@ -272,6 +268,23 @@ VLayeredGridFun1d getConstantXslice(long xIndex) const //( z function)
 		}
     }
     return R;
+}
+
+// For the slice operations in which a reference object is
+// passed in, the routines are not guaranteed to be thread
+// safe unless the input argument is not shared among
+// threads.
+//
+
+void getConstantXslice(long xIndex,VLayeredGridFun1d& R) const //( z function)
+{
+	for(long p = 0; p < layerCount; p++)
+	{
+		for(long k = 0; k <= zPanels[p]; k++)
+		{
+			R.layer[p](k) = layer[p](xIndex,k);
+		}
+    }
 }
 
 void setConstantXslice(long xIndex,const VLayeredGridFun1d& R)   //( z function)
@@ -293,6 +306,22 @@ GridFunction1d getConstantZslice(long layerIndex, long zIndex) const //(x functi
     R.Values(i) = layer[layerIndex](i,zIndex);
     }
     return R;
+}
+
+void getConstantZslice(long layerIndex, long zIndex,GridFunction1d& R) const //(x function)
+{
+    for(long i = 0; i <= xPanels; i++)
+    {
+    R.Values(i) = layer[layerIndex](i,zIndex);
+    }
+}
+
+void setConstantZslice(long layerIndex, long zIndex, const GridFunction1d& R)  //(x function)
+{
+    for(long i = 0; i <= xPanels; i++)
+    {
+    layer[layerIndex](i,zIndex) = R.Values(i);
+    }
 }
 
 
