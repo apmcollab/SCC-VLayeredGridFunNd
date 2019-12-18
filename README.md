@@ -9,7 +9,7 @@ GNU make
 
 ### Versioning
 
-Release : 19.12.19
+Release : 19.12.18
 
 ### Authors
 
