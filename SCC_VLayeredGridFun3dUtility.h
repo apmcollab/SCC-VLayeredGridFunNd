@@ -688,7 +688,7 @@ void inputFromBinaryDataFile(SCC::VLayeredGridFun3d& gF, FILE* dataFile, string 
 
 	zPanels64.resize(layerCount);
 
-	rValue = fread(&zPanels64[0],  sizeof(std::int64_t), layerCount, dataFile) != (uint) layerCount ? 0 : rValue;
+	rValue = fread(&zPanels64[0],  sizeof(std::int64_t), layerCount, dataFile) != (unsigned int) layerCount ? 0 : rValue;
 
 	zPanels.resize(layerCount);
 
@@ -703,7 +703,7 @@ void inputFromBinaryDataFile(SCC::VLayeredGridFun3d& gF, FILE* dataFile, string 
 	rValue = fread(&xMax,      sizeof(double), 1, dataFile) != 1 ? 1 : rValue;
 	rValue = fread(&yMin,      sizeof(double), 1, dataFile) != 1 ? 1 : rValue;
 	rValue = fread(&yMax,      sizeof(double), 1, dataFile) != 1 ? 1 : rValue;
-    rValue = fread(&zBdrys[0], sizeof(double), layerCount+1, dataFile) != (uint)(layerCount+1) ? 1 : rValue;
+    rValue = fread(&zBdrys[0], sizeof(double), layerCount+1, dataFile) != (unsigned int)(layerCount+1) ? 1 : rValue;
 
 	// Check structure
 
@@ -726,7 +726,7 @@ void inputFromBinaryDataFile(SCC::VLayeredGridFun3d& gF, FILE* dataFile, string 
 	for(long n = 0; n < layerCount; n++)
 	{
 	dataSize = (xPanels+1)*(yPanels+1)*(zPanels[n] + 1);
-	rValue = fread(gF.layer[n].getDataPointer(),  sizeof(double), dataSize, dataFile) != (uint) dataSize ? 1 : rValue;
+	rValue = fread(gF.layer[n].getDataPointer(),  sizeof(double), dataSize, dataFile) != (unsigned int) dataSize ? 1 : rValue;
 	}
 
     if(rValue == 1)
