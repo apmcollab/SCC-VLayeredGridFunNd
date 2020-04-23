@@ -52,7 +52,8 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
-using namespace std;
+#include <string>
+#include <vector>
 
 #include "SCC_VLayeredGridFun3d.h"
 
@@ -68,7 +69,7 @@ class VLayeredGridFun3dUtility
 public:
 
 
-void outputDataToVTKfile(const SCC::VLayeredGridFun3d& gridFun, const string& fileName, const string& dataLabel)
+void outputDataToVTKfile(const SCC::VLayeredGridFun3d& gridFun, const std::string& fileName, const std::string& dataLabel)
 {
     FILE* dataFile = 0;
     if(OPENFILE(dataFile,fileName.c_str(), "w+" ))
@@ -89,8 +90,8 @@ void outputDataToVTKfile(const SCC::VLayeredGridFun3d& gridFun, const string& fi
     long nPt = gridFun.getYpanelCount()    + 1;
     long pPt = gridFun.getZpanelCountSum() + 1;
 
-	vector<long>   zPanels   = gridFun.getZpanels();
-	vector<double> zBdrys    = gridFun.getZbdrys();
+	std::vector<long>   zPanels   = gridFun.getZpanels();
+	std::vector<double> zBdrys    = gridFun.getZbdrys();
 
 	long nLayers             = gridFun.getLayerCount();
 
@@ -218,8 +219,8 @@ void outputDataToVTKfile(const SCC::VLayeredGridFun3d& gridFun, const string& fi
 //
 // dataLabel must be less than 256 characters in length
 //
-void outputDataToVTKfile(const VLayeredGridFun3d& gridFun, const string& fileName, const string& dataLabel,
-string scalingCoord, double scalingValue)
+void outputDataToVTKfile(const VLayeredGridFun3d& gridFun, const std::string& fileName, const std::string& dataLabel,
+std::string scalingCoord, double scalingValue)
 {
     FILE* dataFile = 0;
     if(OPENFILE(dataFile,fileName.c_str(), "w+" ))
@@ -240,8 +241,8 @@ string scalingCoord, double scalingValue)
     long nPt = gridFun.getYpanelCount()    + 1;
     long pPt = gridFun.getZpanelCountSum() + 1;
 
-	vector<long>   zPanels   = gridFun.getZpanels();
-	vector<double> zBdrys    = gridFun.getZbdrys();
+	std::vector<long>   zPanels   = gridFun.getZpanels();
+	std::vector<double> zBdrys    = gridFun.getZbdrys();
 
 	long nLayers             = gridFun.getLayerCount();
 
@@ -417,13 +418,13 @@ string scalingCoord, double scalingValue)
 //
 // Grid values for layer layerCount-1
 //
-void outputToDataFile(const SCC::VLayeredGridFun3d& gF, const string& fileName,
-const string& formatString = "%20.15e")
+void outputToDataFile(const SCC::VLayeredGridFun3d& gF, const std::string& fileName,
+const std::string& formatString = "%20.15e")
 {
 //
-//  Create format string
+//  Create format std::string
 //
-    ostringstream s;
+    std::ostringstream s;
     s.str("");
     s << formatString << " ";
 //
@@ -439,8 +440,8 @@ const string& formatString = "%20.15e")
     long yPanels = gF.getYpanelCount();
 
     long layerCount        = gF.getLayerCount();
-    vector<long>   zPanels = gF.getZpanels();
-    vector<double> zBdrys  = gF.getZbdrys();
+    std::vector<long>   zPanels = gF.getZpanels();
+    std::vector<double> zBdrys  = gF.getZbdrys();
 
     double xMin  = gF.getXmin();
     double yMin  = gF.getYmin();
@@ -493,7 +494,7 @@ const string& formatString = "%20.15e")
 
 
 
-void inputFromDataFile(SCC::VLayeredGridFun3d& gF, FILE* dataFile, string fileName = "")
+void inputFromDataFile(SCC::VLayeredGridFun3d& gF, FILE* dataFile, std::string fileName = "")
 {
     long xPanels; long yPanels;
 
@@ -501,8 +502,8 @@ void inputFromDataFile(SCC::VLayeredGridFun3d& gF, FILE* dataFile, string fileNa
     double yMin; double yMax;
 
     long            layerCount;
-	vector<long>    zPanels;
-    vector<double>  zBdrys;
+	std::vector<long>    zPanels;
+    std::vector<double>  zBdrys;
 
     int rValue = 0;
 
@@ -566,7 +567,7 @@ void inputFromDataFile(SCC::VLayeredGridFun3d& gF, FILE* dataFile, string fileNa
 
 }
 
-void inputFromDataFile(SCC::VLayeredGridFun3d& gF, const string& fileName)
+void inputFromDataFile(SCC::VLayeredGridFun3d& gF, const std::string& fileName)
 {
 //
 //  Open input file
@@ -599,8 +600,8 @@ void outputToBinaryDataFile(const SCC::VLayeredGridFun3d& gF, FILE* dataFile)
     long layerCount              = gF.getLayerCount();
     std::int64_t layerCount64    = gF.getLayerCount();
 
-    vector<long>         zPanels = gF.getZpanels();
-    vector<std::int64_t> zPanels64(layerCount);
+    std::vector<long>         zPanels = gF.getZpanels();
+    std::vector<std::int64_t> zPanels64(layerCount);
 
     for(long i = 0; i < layerCount; i++)
     {
@@ -613,7 +614,7 @@ void outputToBinaryDataFile(const SCC::VLayeredGridFun3d& gF, FILE* dataFile)
     double yMin  = gF.getYmin();
     double yMax  = gF.getYmax();
 
-    vector<double> zBdrys = gF.getZbdrys();
+    std::vector<double> zBdrys = gF.getZbdrys();
 
 	//
 	//  Write out the grid structure information. Using std:int64
@@ -641,7 +642,7 @@ void outputToBinaryDataFile(const SCC::VLayeredGridFun3d& gF, FILE* dataFile)
 	}
 }
 
-void outputToBinaryDataFile(const SCC::VLayeredGridFun3d& gF, const string& fileName)
+void outputToBinaryDataFile(const SCC::VLayeredGridFun3d& gF, const std::string& fileName)
 {
 //
 //  Open and then write to a file
@@ -657,24 +658,24 @@ void outputToBinaryDataFile(const SCC::VLayeredGridFun3d& gF, const string& file
     fclose(dataFile);
 }
 
-void inputFromBinaryDataFile(SCC::VLayeredGridFun3d& gF, FILE* dataFile, string fileName = "")
+void inputFromBinaryDataFile(SCC::VLayeredGridFun3d& gF, FILE* dataFile, std::string fileName = "")
 {
 	size_t rValue;
     long dataSize;
 
     long    xPanels;    long yPanels;
     long                layerCount;
-    vector<long>        zPanels;
+    std::vector<long>        zPanels;
 
     double xMin; double yMin;
     double xMax; double yMax;
-    vector<double>    zBdrys;
+    std::vector<double>    zBdrys;
 
 	std::int64_t xPanels64;
 	std::int64_t yPanels64;
 	std::int64_t layerCount64;
 
-	vector<std::int64_t>   zPanels64;
+	std::vector<std::int64_t>   zPanels64;
 
     rValue = 0;
 
@@ -735,7 +736,7 @@ void inputFromBinaryDataFile(SCC::VLayeredGridFun3d& gF, FILE* dataFile, string 
     }
 }
 
-void inputFromBinaryDataFile(SCC::VLayeredGridFun3d& gF, const string& fileName)
+void inputFromBinaryDataFile(SCC::VLayeredGridFun3d& gF, const std::string& fileName)
 {
 	//
 	//  Open input file (remember to use the b mode to specify binary!!!!)
@@ -747,7 +748,7 @@ void inputFromBinaryDataFile(SCC::VLayeredGridFun3d& gF, const string& fileName)
     throw std::runtime_error("\nCannot open " + fileName + " \nFile not found.\n");
     }
 
-	string dataFileName = fileName;
+	std::string dataFileName = fileName;
 
 	inputFromBinaryDataFile(gF,dataFile,dataFileName);
 

@@ -33,7 +33,8 @@
 #
 ###################################################################
 */
-
+#include <string>
+#include <exception>
 
 #include "VLayeredGridFunNd/SCC_VLayeredGridFun1d.h"
 #include "VLayeredGridFunNd/SCC_VLayeredGridFun2d.h"
@@ -59,7 +60,7 @@ bool identicalHz(const SCC::VLayeredGridFun1d& V)
     double hz = V.layer[0].getHx();
     for(long i = 0; i < V.getLayerCount(); i++)
     {
-    	if(abs(hz - V.layer[i].getHx()) > 1.0e-14*hz){return false;}
+    	if(std::abs(hz - V.layer[i].getHx()) > 1.0e-14*hz){return false;}
     }
     return true;
 }
@@ -69,7 +70,7 @@ bool identicalHz(const SCC::VLayeredGridFun2d& V)
     double hz = V.layer[0].getHy();
     for(long i = 0; i < V.getLayerCount(); i++)
     {
-    	if(abs(hz - V.layer[i].getHy()) > 1.0e-14*hz){return false;}
+    	if(std::abs(hz - V.layer[i].getHy()) > 1.0e-14*hz){return false;}
     }
     return true;
 }
@@ -79,7 +80,7 @@ bool identicalHz(const SCC::VLayeredGridFun3d& V)
     double hz = V.layer[0].getHz();
     for(long i = 0; i < V.getLayerCount(); i++)
     {
-    	if(abs(hz - V.layer[i].getHz()) > 1.0e-14*hz){return false;}
+    	if(std::abs(hz - V.layer[i].getHz()) > 1.0e-14*hz){return false;}
     }
     return true;
 }
@@ -104,7 +105,7 @@ bool checkForConsistentGridStructure(const SCC::GridFunction1d& uniformG, const 
     	throw std::runtime_error("\n Layered grid Z mesh widths unequal : conversion to uniform grid function unsupported \n");
     }
 
-    string eMessage;
+    std::string eMessage;
 
     bool checkVal = true;
     if(uniformG.getXpanelCount() != G.getZpanelCountSum())    checkVal = false;
@@ -125,7 +126,7 @@ bool checkForConsistentGridStructure(const SCC::GridFunction2d& uniformG, const 
     	throw std::runtime_error("\n Layered grid Z mesh widths unequal : conversion to uniform grid function unsupported \n");
     }
 
-    string eMessage;
+    std::string eMessage;
 
     bool checkVal = true;
     if(uniformG.getXpanelCount() != G.getXpanelCount())    checkVal = false;
@@ -149,7 +150,7 @@ bool checkForConsistentGridStructure(const SCC::GridFunction3d& uniformG, const 
     	throw std::runtime_error("\n Layered grid Z mesh widths unequal : conversion to uniform grid function unsupported \n");
     }
 
-    string eMessage;
+    std::string eMessage;
 
     bool checkVal = true;
     if(uniformG.getXpanelCount() != G.getXpanelCount())    checkVal = false;

@@ -50,7 +50,6 @@
 #include <functional>
 #include <iostream>
 #include <vector>
-using namespace std;
 
 #include "GridFunctionNd/SCC_GridFunction2d.h"
 #include "SCC_VLayeredGridFun1d.h"
@@ -69,7 +68,7 @@ VLayeredGridFun2d()
 }
 
 VLayeredGridFun2d(long xPanels, double xMin, double xMax,
-				  long layerCount, const vector<long>& zPanels, const vector<double>& zBdrys)
+				  long layerCount, const std::vector<long>& zPanels, const std::vector<double>& zBdrys)
 {
     initialize(xPanels,xMin,xMax,layerCount,zPanels,zBdrys);
 }
@@ -103,7 +102,7 @@ void initialize(const VLayeredGridFun2d& M)
 
     layerCount = M.layerCount;
 
-    // Can't use vector = for layer because the bounds checking
+    // Can't use std::vector = for layer because the bounds checking
     // of the underlying arrays inhibits initializing with an
     // instance of a different size
 
@@ -120,7 +119,7 @@ void initialize(const VLayeredGridFun2d& M)
 }
 
 void initialize(long xPanels, double xMin, double xMax,
-			    long layerCount, const vector<long>& zPanels, const vector<double>& zBdrys)
+			    long layerCount, const std::vector<long>& zPanels, const std::vector<double>& zBdrys)
 {
     initialize();
 
@@ -176,7 +175,7 @@ bool isEqualStructure(const VLayeredGridFun2d& V) const
     for(long i = 0; i < layerCount; i++)
     {
     if(zPanels[i] != V.zPanels[i]){return false;}
-    else if(abs(zWidth[i] - V.zWidth[i]) > 1.0e-012*zWidth[i]){return false;}
+    else if(std::abs(zWidth[i] - V.zWidth[i]) > 1.0e-012*zWidth[i]){return false;}
     }
 
     return true;
@@ -213,8 +212,8 @@ VLayeredGridFun2d  extractLayers(long begIndex, long endIndex) const
 {
 
 	long  lcount = (endIndex - begIndex) + 1; 
-	vector<long>   zPn(lcount);
-	vector<double> zBd(lcount+1);
+	std::vector<long>   zPn(lcount);
+	std::vector<double> zBd(lcount+1);
 
 	for(long k = begIndex; k <= endIndex; k++)
 	{
@@ -355,12 +354,12 @@ long getLayerCount() const
 	return layerCount;
 }
 
-vector<double> getZbdrys() const
+std::vector<double> getZbdrys() const
 {
 	return zBdrys;
 }
 
-vector<long> getZpanels() const
+std::vector<long> getZpanels() const
 {
 	return zPanels;
 }
@@ -583,7 +582,7 @@ double norm2() const
     {
     norm2val += layer[i].norm2squared();
     }
-    return sqrt(norm2val);
+    return std::sqrt(norm2val);
 }
 
 // The required integral is approximated using the Trapezoidal method
@@ -659,7 +658,7 @@ void scal(double alpha)
 
 double nrm2() const
 {
-	return sqrt(fabs(this->dot(*this)));
+	return std::sqrt(std::abs(this->dot(*this)));
 }
 
 
@@ -673,11 +672,11 @@ double nrm2() const
     long                       xPanels;
 
 
-    vector< GridFunction2d >      layer;
-    long                     layerCount;
-    vector<double> 			     zWidth;
-    vector<double> 			     zBdrys;
-    vector<long>                zPanels;
+    std::vector< GridFunction2d >         layer;
+    long                             layerCount;
+    std::vector<double> 			     zWidth;
+    std::vector<double> 			     zBdrys;
+    std::vector<long>                   zPanels;
 
 };
 }
