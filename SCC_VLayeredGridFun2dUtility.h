@@ -665,7 +665,7 @@ void outputToBinaryDataFile(const SCC::VLayeredGridFun2d& gF, const std::string&
 //
     FILE* dataFile;
 
-    if(OPENFILE(dataFile,fileName.c_str(), "w+" ))
+    if(OPENFILE(dataFile,fileName.c_str(), "w+b" ))
     {
       throw std::runtime_error("\nCannot open " + fileName + " \nFile not found.\n");
     }

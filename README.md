@@ -9,7 +9,7 @@ GNU make
 
 ### Versioning
 
-Release : 1.0.1
+Release : 1.0.2
 
 ### Authors
 

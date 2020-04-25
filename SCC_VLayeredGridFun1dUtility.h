@@ -280,7 +280,8 @@ void inputFromDataFile(SCC::VLayeredGridFun1d& gF, const std::string& fileName)
 
 //
 // Using std::int64 to insure that the input and output of integers always
-// uses 64 bit integer representation.
+// uses 64 bit integer representation. It is also assumed that the FILE* pointer
+// dataFile has been opened for binary output.
 //
 void outputToBinaryDataFile(const SCC::VLayeredGridFun1d& gF, FILE* dataFile)
 {
@@ -329,7 +330,7 @@ void outputToBinaryDataFile(const SCC::VLayeredGridFun1d& gF, const std::string&
 //
     FILE* dataFile;
 
-    if(OPENFILE(dataFile,fileName.c_str(), "w+" ))
+    if(OPENFILE(dataFile,fileName.c_str(), "w+b" ))
     {
       throw std::runtime_error("\nCannot open " + fileName + " \nFile not found.\n");
     }
