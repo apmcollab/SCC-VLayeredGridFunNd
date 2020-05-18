@@ -341,7 +341,6 @@ void insertUniformGridFunction3d(const SCC::GridFunction3d& uniformGrid, SCC::VL
     	throw std::runtime_error("\n Insertion of uniform grid function into layered grid function failed \n");
     }
 
-    long zPanels = V.getZpanelCountSum();
 
 	long zIndex = 0;
 	long zIndexStart;
