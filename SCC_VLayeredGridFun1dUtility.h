@@ -40,8 +40,8 @@
 #include "SCC_VLayeredGridFun1d.h"
 
 
-#ifndef _SCC_VLayeredGridFun1dUtility_
-#define _SCC_VLayeredGridFun1dUtility_
+#ifndef SCC_VLAYERED_GRID_FUN1D_UTILITY_
+#define SCC_VLAYERED_GRID_FUN1D_UTILITY_
 
 // MS compilers generate warnings if fopen is used instead of fopen_s (a Microsoft specific language
 // extension, so this macro implements the appropriate equivalent to fopen that MS wants when

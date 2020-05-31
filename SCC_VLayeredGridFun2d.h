@@ -44,8 +44,8 @@
 #############################################################################
 */
 
-#ifndef __SCC_VLayeredGridFun2d__
-#define __SCC_VLayeredGridFun2d__
+#ifndef SCC_VLAYERED_GRID_FUN2D_
+#define SCC_VLAYERED_GRID_FUN2D_
 
 #include <functional>
 #include <iostream>
@@ -597,26 +597,26 @@ double  integral() const
     return intVal;
 }
 
-double min() const
+double getMin() const
 {
-    double minVal = layer[0].min();
+    double minVal = layer[0].getMin();
     double minTmp;
 
     for(long i = 1; i < layerCount; i++)
     {
-    minTmp = layer[i].min();
+    minTmp = layer[i].getMin();
     minVal = (minTmp < minVal) ? minTmp : minVal;
     }
     return minVal;
 }
 
-double max() const
+double getMax() const
 {
-    double maxVal = layer[0].max();
+    double maxVal = layer[0].getMax();
     double maxTmp;
     for(long i = 1; i < layerCount; i++)
     {
-    maxTmp = layer[i].max();
+    maxTmp = layer[i].getMax();
     maxVal = (maxTmp > maxVal) ? maxTmp : maxVal;
     }
     return maxVal;

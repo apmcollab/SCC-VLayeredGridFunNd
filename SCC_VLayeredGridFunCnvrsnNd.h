@@ -44,8 +44,8 @@
 #include "GridFunctionNd/SCC_GridFunction2d.h"
 #include "GridFunctionNd/SCC_GridFunction3d.h"
 
-#ifndef _VLayeredGridCnvrsnNd_
-#define _VLayeredGridCnvrsnNd_
+#ifndef SCC_VLAYERED_GRID_CNVRSN_ND_
+#define SCC_VLAYERED_GRID_CNVRSN_ND_
 
 namespace SCC
 {

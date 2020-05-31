@@ -56,8 +56,8 @@
 
 #include "SCC_VLayeredGridFun2d.h"
 
-#ifndef  _VlayeredGridFun2dUtility_
-#define  _VlayeredGridFun2dUtility_
+#ifndef  SCC_VLAYERED_GRID_FUN2D_UTILITY_
+#define  SCC_VLAYERED_GRID_FUN2D_UTILITY_
 
 namespace SCC
 {
