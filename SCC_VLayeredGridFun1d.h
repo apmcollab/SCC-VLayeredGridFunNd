@@ -41,6 +41,14 @@
 #############################################################################
 */
 
+#ifdef _MSC_VER
+#include "iso646.h"          // So "and" is equivalenced to &&
+typedef unsigned int uint;   // Define uint to be unsigned int
+#undef min
+#undef max
+#endif
+
+
 #ifndef SCC_VLAYERED_GRID_FUN1D_
 #define SCC_VLAYERED_GRID_FUN1D_
 
@@ -495,26 +503,26 @@ double  integral() const
     return intVal;
 }
 
-double getMin() const
+double min() const
 {
-    double minVal = layer[0].getMin();
+    double minVal = layer[0].min();
     double minTmp;
 
     for(long i = 1; i < layerCount; i++)
     {
-    minTmp = layer[i].getMin();
+    minTmp = layer[i].min();
     minVal = (minTmp < minVal) ? minTmp : minVal;
     }
     return minVal;
 }
 
-double getMax() const
+double max() const
 {
-    double maxVal = layer[0].getMax();
+    double maxVal = layer[0].max();
     double maxTmp;
     for(long i = 1; i < layerCount; i++)
     {
-    maxTmp = layer[i].getMax();
+    maxTmp = layer[i].max();
     maxVal = (maxTmp > maxVal) ? maxTmp : maxVal;
     }
     return maxVal;
