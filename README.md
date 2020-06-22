@@ -9,11 +9,11 @@ GNU make
 
 ### Versioning
 
-Release : 1.0.3
+Release : 1.0.4
 
 ### Date 
 
-June 6, 2020 
+June 22, 2020 
 
 ### Authors
 

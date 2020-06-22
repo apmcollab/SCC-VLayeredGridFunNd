@@ -213,9 +213,7 @@ void outputDataToVTKfile(const SCC::VLayeredGridFun3d& gridFun, const std::strin
 // values of the interface values of the layers on either side of the interface.
 //
 // This scales the coordinate values of the scaling coordinate specified (one of "x", "y" or "z") so that
-// the coordinate extent is the scaling value times the largest size of the domain in the other coordinate
-// directions. This utility is added so that rectangular regions in which the specified coordinate is thin
-// with respect to the others can be viewed with the thin region expanded.
+// the coordinate extent is the scaling value times the coordinate values.
 //
 // dataLabel must be less than 256 characters in length
 //
@@ -248,40 +246,35 @@ std::string scalingCoord, double scalingValue)
 
     long dataCount           = mPt*nPt*pPt;
 
-    double xScalingFactor = -1.0;
-    double yScalingFactor = -1.0;
-    double zScalingFactor = -1.0;
 
-    if((scalingCoord == "x") || (scalingCoord == "X")  ){xScalingFactor = scalingValue;}
-    if((scalingCoord == "y") || (scalingCoord == "Y")  ){yScalingFactor = scalingValue;}
-    if((scalingCoord == "z") || (scalingCoord == "Z")  ){zScalingFactor = scalingValue;}
+    bool   xScalingFlag = false;
+    bool   yScalingFlag = false;
+    bool   zScalingFlag = false;
+
+    double xScalingFactor = 1.0;
+    double yScalingFactor = 1.0;
+    double zScalingFactor = 1.0;
+
+    if((scalingCoord == "x") || (scalingCoord == "X")  ){xScalingFactor = scalingValue; xScalingFlag = true;}
+    if((scalingCoord == "y") || (scalingCoord == "Y")  ){yScalingFactor = scalingValue; yScalingFlag = true;}
+    if((scalingCoord == "z") || (scalingCoord == "Z")  ){zScalingFactor = scalingValue; zScalingFlag = true;}
 
     double transverseSizeMax;
 
-    if(xScalingFactor > 0.0)
+    if(xScalingFlag)
     {
-    transverseSizeMax = d-c;
-    transverseSizeMax = (transverseSizeMax > (f-e)) ? transverseSizeMax : (f-e);
-    xScalingFactor = (xScalingFactor*transverseSizeMax)/(b-a);
+    xScalingFactor = scalingValue;
     }
-    else {xScalingFactor = 1.0;}
 
-    if(yScalingFactor > 0.0)
+    if(yScalingFlag)
     {
-    transverseSizeMax = b-a;
-    transverseSizeMax = (transverseSizeMax > (f-e)) ? transverseSizeMax : (f-e);
-    yScalingFactor = (yScalingFactor*transverseSizeMax)/(d-c);
+    yScalingFactor = scalingValue;
     }
-    else {yScalingFactor = 1.0;}
 
-
-    if(zScalingFactor > 0.0)
+    if(zScalingFlag)
     {
-    transverseSizeMax = b-a;
-    transverseSizeMax = (transverseSizeMax > (d-c)) ? transverseSizeMax : (d-c);
-    zScalingFactor = (zScalingFactor*transverseSizeMax)/(f-e);
+    zScalingFactor = scalingValue;
     }
-    else {zScalingFactor = 1.0;}
 
     long i; long j; long k;  long  n;
     double xPos; double yPos; double zPos;
