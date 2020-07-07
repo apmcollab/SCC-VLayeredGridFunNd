@@ -226,9 +226,9 @@ std::string scalingCoord, double scalingValue)
       throw std::runtime_error("\nCannot open " + fileName + " \nFile not found.\n");
     }
 
-    double a  = gridFun.getXmin();  double b  = gridFun.getXmax();
-    double c  = gridFun.getYmin();  double d  = gridFun.getYmax();
-	double e  = gridFun.getZmin();  double f  = gridFun.getZmax();
+    double a  = gridFun.getXmin();  //double b  = gridFun.getXmax();
+    double c  = gridFun.getYmin();  //double d  = gridFun.getYmax();
+	double e  = gridFun.getZmin();  //double f  = gridFun.getZmax();
 
     double hx = gridFun.getHx();
     double hy = gridFun.getHy();
@@ -258,8 +258,6 @@ std::string scalingCoord, double scalingValue)
     if((scalingCoord == "x") || (scalingCoord == "X")  ){xScalingFactor = scalingValue; xScalingFlag = true;}
     if((scalingCoord == "y") || (scalingCoord == "Y")  ){yScalingFactor = scalingValue; yScalingFlag = true;}
     if((scalingCoord == "z") || (scalingCoord == "Z")  ){zScalingFactor = scalingValue; zScalingFlag = true;}
-
-    double transverseSizeMax;
 
     if(xScalingFlag)
     {
