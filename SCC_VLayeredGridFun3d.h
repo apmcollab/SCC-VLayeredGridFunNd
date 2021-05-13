@@ -904,6 +904,15 @@ double nrm2() const
 }
 
 
+void enforceXYperiodicity()
+{
+    for(long i = 0; i < layerCount; i++)
+    {
+    layer[i].enforceXYperiodicity();
+    }
+}
+
+
 //
 //  Data Members
 //

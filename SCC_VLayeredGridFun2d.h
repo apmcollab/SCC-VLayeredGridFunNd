@@ -495,6 +495,13 @@ void operator-=(const std::function<double(double,double)>& F)
     }
 }
 
+void enforceXperiodicity()
+{
+    for(long k = 0; k < layerCount; k++)
+    {
+        layer[k].enforceXperiodicity();
+    }
+}
 
 
 void squareValues()
