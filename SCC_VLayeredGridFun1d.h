@@ -82,7 +82,7 @@ VLayeredGridFun1d(const VLayeredGridFun1d& M)
     initialize(M);
 }
 
-void initialize()
+virtual void initialize()
 {
 	layerCount = 0;
 	layer.clear();
@@ -91,7 +91,7 @@ void initialize()
     zPanels.clear();
 }
 
-void initialize(const VLayeredGridFun1d& M)
+virtual void initialize(const VLayeredGridFun1d& M)
 {
     layerCount = M.layerCount;
 
@@ -111,7 +111,7 @@ void initialize(const VLayeredGridFun1d& M)
     zPanels    = M.zPanels;
 }
 
-void initialize(long layerCount, const std::vector<long>& zPanels, const std::vector<double>& zBdrys)
+virtual void initialize(long layerCount, const std::vector<long>& zPanels, const std::vector<double>& zBdrys)
 {
     initialize();
 
@@ -181,7 +181,7 @@ long getZpanelCountSum() const
 // number of panels. It is not required that the structures
 // have identical x-boundary points.
 //
-bool isEqualStructure(const VLayeredGridFun1d& V) const
+virtual bool isEqualStructure(const VLayeredGridFun1d& V) const
 {
 
     if((layer.size() == 0)&&(V.layer.size() != 0))       return false;

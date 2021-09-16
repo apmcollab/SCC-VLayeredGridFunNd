@@ -92,7 +92,7 @@ VLayeredGridFun3d(const VLayeredGridFun3d& M)
     initialize(M);
 }
 
-void initialize()
+virtual void initialize()
 {
 	xWidth   = 1.0;
 	xMin     = 0.0;
@@ -111,7 +111,7 @@ void initialize()
     zPanels.clear();
 }
 
-void initialize(const VLayeredGridFun3d& M)
+virtual void initialize(const VLayeredGridFun3d& M)
 {
 	xWidth   = M.xWidth;
     xMin     = M.xMin;
@@ -141,7 +141,7 @@ void initialize(const VLayeredGridFun3d& M)
     zPanels    = M.zPanels;
 }
 
-void initialize(long xPanels, double xMin, double xMax,
+virtual void initialize(long xPanels, double xMin, double xMax,
 		        long yPanels, double yMin, double yMax,
 			    long layerCount, const std::vector<long>& zPanels, const std::vector<double>& zBdrys)
 {
@@ -189,7 +189,7 @@ virtual ~VLayeredGridFun3d()
 // number of panels. It is not required that the structures
 // have identical x-boundary points.
 //
-bool isEqualStructure(const VLayeredGridFun3d& V) const
+virtual bool isEqualStructure(const VLayeredGridFun3d& V) const
 {
 
     if((layer.size() == 0)&&(V.layer.size() != 0))       return false;
@@ -929,7 +929,7 @@ void enforceXYperiodicity()
     long                        yPanels;
 
     std::vector< GridFunction3d >      layer;
-    long                     layerCount;
+    long                            layerCount;
     std::vector<double> 			     zWidth;
     std::vector<double> 			     zBdrys;
     std::vector<long>                   zPanels;
