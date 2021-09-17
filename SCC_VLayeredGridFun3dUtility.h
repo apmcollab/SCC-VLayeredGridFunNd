@@ -68,6 +68,16 @@ class VLayeredGridFun3dUtility
 
 public:
 
+void setVTKthreshold(double vtkThresholdMagnitude)
+{
+	this->vtkThresholdMagnitude = vtkThresholdMagnitude;
+}
+
+void clearVTKthreshold()
+{
+	this->vtkThresholdMagnitude = -1.0;
+}
+
 
 void outputDataToVTKfile(const SCC::VLayeredGridFun3d& gridFun, const std::string& fileName, const std::string& dataLabel)
 {
@@ -150,6 +160,8 @@ void outputDataToVTKfile(const SCC::VLayeredGridFun3d& gridFun, const std::strin
     // layer interface are the averages of values associated with the layers
     // on either side of the interface.
 
+    double value;
+
     for(n = 0; n < nLayers; n++)
     {
 
@@ -161,7 +173,8 @@ void outputDataToVTKfile(const SCC::VLayeredGridFun3d& gridFun, const std::strin
         		{
         			for(i = 0; i < mPt; i++)
         			{
-        				fprintf(dataFile, "%20.15e ",gridFun.layer[n](i,j,k));
+        				value = (std::abs(gridFun.layer[n](i,j,k)) > vtkThresholdMagnitude) ? gridFun.layer[n](i,j,k) : 0.0;
+        				fprintf(dataFile, "%20.15e ",value);
         			}
         			fprintf(dataFile, "\n");
         		}
@@ -175,7 +188,8 @@ void outputDataToVTKfile(const SCC::VLayeredGridFun3d& gridFun, const std::strin
         	for(i = 0; i < mPt; i++)
             {
         		avgVal = 0.5*(gridFun.layer[n-1](i,j,zPanels[n-1])+gridFun.layer[n](i,j,0));
-        		fprintf(dataFile, "%20.15e ",avgVal);
+        		value = (std::abs(avgVal) > vtkThresholdMagnitude) ? avgVal : 0.0;
+        		fprintf(dataFile, "%20.15e ",value);
             }
         	   fprintf(dataFile, "\n");
             }
@@ -187,7 +201,8 @@ void outputDataToVTKfile(const SCC::VLayeredGridFun3d& gridFun, const std::strin
         		{
         			for(i = 0; i < mPt; i++)
         			{
-        				fprintf(dataFile, "%20.15e ",gridFun.layer[n](i,j,k));
+        				value = (std::abs(gridFun.layer[n](i,j,k)) > vtkThresholdMagnitude) ? gridFun.layer[n](i,j,k) : 0.0;
+        				fprintf(dataFile, "%20.15e ",value);
         			}
         			fprintf(dataFile, "\n");
         		}
@@ -199,7 +214,8 @@ void outputDataToVTKfile(const SCC::VLayeredGridFun3d& gridFun, const std::strin
     {
     	for(i = 0; i < mPt; i++)
     	{
-    		fprintf(dataFile, "%20.15e ",gridFun.layer[nLayers-1](i,j,zPanels[nLayers-1]));
+    	value = (std::abs(gridFun.layer[nLayers-1](i,j,zPanels[nLayers-1])) > vtkThresholdMagnitude) ? gridFun.layer[nLayers-1](i,j,zPanels[nLayers-1]) : 0.0;
+        fprintf(dataFile, "%20.15e ",value);
         }
     	fprintf(dataFile, "\n");
     }
@@ -243,9 +259,7 @@ std::string scalingCoord, double scalingValue)
 	std::vector<double> zBdrys    = gridFun.getZbdrys();
 
 	long nLayers             = gridFun.getLayerCount();
-
     long dataCount           = mPt*nPt*pPt;
-
 
     bool   xScalingFlag = false;
     bool   yScalingFlag = false;
@@ -325,6 +339,8 @@ std::string scalingCoord, double scalingValue)
     // layer interface are the averages of values associated with the layers
     // on either side of the interface.
 
+    double value;
+
     for(n = 0; n < nLayers; n++)
     {
 
@@ -336,7 +352,8 @@ std::string scalingCoord, double scalingValue)
         		{
         			for(i = 0; i < mPt; i++)
         			{
-        				fprintf(dataFile, "%20.15e ",gridFun.layer[n](i,j,k));
+        				value = (std::abs(gridFun.layer[n](i,j,k)) > vtkThresholdMagnitude) ? gridFun.layer[n](i,j,k) : 0.0;
+        				fprintf(dataFile, "%20.15e ",value);
         			}
         			fprintf(dataFile, "\n");
         		}
@@ -350,7 +367,8 @@ std::string scalingCoord, double scalingValue)
         	for(i = 0; i < mPt; i++)
             {
         		avgVal = 0.5*(gridFun.layer[n-1](i,j,zPanels[n-1])+gridFun.layer[n](i,j,0));
-        		fprintf(dataFile, "%20.15e ",avgVal);
+        		value = (std::abs(avgVal) > vtkThresholdMagnitude) ? avgVal : 0.0;
+        		fprintf(dataFile, "%20.15e ",value);
             }
         	   fprintf(dataFile, "\n");
             }
@@ -362,7 +380,8 @@ std::string scalingCoord, double scalingValue)
         		{
         			for(i = 0; i < mPt; i++)
         			{
-        				fprintf(dataFile, "%20.15e ",gridFun.layer[n](i,j,k));
+        				value = (std::abs(gridFun.layer[n](i,j,k)) > vtkThresholdMagnitude) ? gridFun.layer[n](i,j,k) : 0.0;
+        				fprintf(dataFile, "%20.15e ",value);
         			}
         			fprintf(dataFile, "\n");
         		}
@@ -374,7 +393,8 @@ std::string scalingCoord, double scalingValue)
     {
     	for(i = 0; i < mPt; i++)
     	{
-    		fprintf(dataFile, "%20.15e ",gridFun.layer[nLayers-1](i,j,zPanels[nLayers-1]));
+    	value = (std::abs(gridFun.layer[nLayers-1](i,j,zPanels[nLayers-1])) > vtkThresholdMagnitude) ? gridFun.layer[nLayers-1](i,j,zPanels[nLayers-1]) : 0.0;
+        fprintf(dataFile, "%20.15e ",value);
         }
     	fprintf(dataFile, "\n");
     }
@@ -750,6 +770,13 @@ void inputFromBinaryDataFile(SCC::VLayeredGridFun3d& gF, const std::string& file
 
     fclose(dataFile);
 }
+
+
+//////////////////////////////////////////////////////////////////
+//           Data members
+/////////////////////////////////////////////////////////////////
+
+	double vtkThresholdMagnitude;
 
 };
 
