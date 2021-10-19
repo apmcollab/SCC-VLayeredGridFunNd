@@ -334,6 +334,33 @@ SCC::GridFunction3d createUniformGridFunction(const SCC::VLayeredGridFun3d& V)
 }
 
 
+// Returns a single layer layered grid function with values and grid parameters
+// specified by those in G
+
+void createLayeredGridFunction(const  SCC::GridFunction3d& G, SCC::VLayeredGridFun3d& V)
+{
+	long xPanels = G.getXpanelCount();
+    double xMin  = G.getXmin();
+    double xMax  = G.getXmax();
+
+	long yPanels = G.getYpanelCount();
+    double yMin  = G.getYmin();
+    double yMax  = G.getYmax();
+
+	long     zP  = G.getZpanelCount();
+    double zMin  = G.getZmin();
+    double zMax  = G.getZmax();
+
+    std::vector<long>   zPanels = {zP};
+    std::vector<double> zBdrys  = {zMin,zMax};
+
+    long layerCount = 1;
+
+    V.initialize(xPanels,xMin, xMax, yPanels,yMin, yMax, layerCount, zPanels, zBdrys);
+    V.layer[0].initialize(G);
+}
+
+
 void insertUniformGridFunction3d(const SCC::GridFunction3d& uniformGrid, SCC::VLayeredGridFun3d& V)
 {
     if(not checkForConsistentGridStructure(uniformGrid,V))
