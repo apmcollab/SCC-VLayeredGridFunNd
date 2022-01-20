@@ -68,6 +68,17 @@ class VLayeredGridFun3dUtility
 
 public:
 
+VLayeredGridFun3dUtility()
+{
+   this->vtkThresholdMagnitude = -1.0;
+}
+
+VLayeredGridFun3dUtility(const VLayeredGridFun3dUtility& U)
+{
+   this->vtkThresholdMagnitude = U.vtkThresholdMagnitude;
+}
+
+
 void setVTKthreshold(double vtkThresholdMagnitude)
 {
 	this->vtkThresholdMagnitude = vtkThresholdMagnitude;
