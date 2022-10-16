@@ -174,7 +174,7 @@ virtual void initialize(long xPanels, double xMin, double xMax,
     e = zBdrys[i];
     f = zBdrys[i+1];
     layer[i].initialize(xPanels,xMin,xMax,yPanels,yMin,yMax,zPanels[i],e,f);
-    this->zWidth[i]  = e-f;
+    this->zWidth[i]  = f-e;
     }
 }
 
@@ -207,7 +207,7 @@ virtual bool isEqualStructure(const VLayeredGridFun3d& V) const
     for(long i = 0; i < layerCount; i++)
     {
     if(zPanels[i] != V.zPanels[i]){return false;}
-    else if(std::abs(zWidth[i] - V.zWidth[i]) > 1.0e-012*zWidth[i]){return false;}
+    else if(std::abs(zWidth[i] - V.zWidth[i]) > 1.0e-012*std::abs(zWidth[i])){return false;}
     }
 
     return true;

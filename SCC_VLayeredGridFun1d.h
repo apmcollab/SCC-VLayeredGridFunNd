@@ -190,7 +190,7 @@ virtual bool isEqualStructure(const VLayeredGridFun1d& V) const
     for(long i = 0; i < layerCount; i++)
     {
     if(zPanels[i] != V.zPanels[i]){return false;}
-    else if(std::abs(zWidth[i] - V.zWidth[i]) > 1.0e-012*zWidth[i]){return false;}
+    else if(std::abs(zWidth[i] - V.zWidth[i]) > 1.0e-012*std::abs(zWidth[i])){return false;}
     }
 
     return true;
