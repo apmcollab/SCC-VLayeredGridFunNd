@@ -912,6 +912,13 @@ void enforceXYperiodicity()
     }
 }
 
+void enforceXYperiodicityAveraging()
+{
+    for(long i = 0; i < layerCount; i++)
+    {
+    layer[i].enforceXYperiodicityAveraging();
+    }
+}
 
 //
 //  Data Members
