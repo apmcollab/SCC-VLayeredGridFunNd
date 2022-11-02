@@ -108,7 +108,7 @@ bool checkForConsistentGridStructure(const SCC::GridFunction1d& uniformG, const 
     std::string eMessage;
 
     bool checkVal = true;
-    if(uniformG.getXpanelCount() != G.getZpanelCountSum())    checkVal = false;
+    if(uniformG.getXpanelCount() != G.getZpanelCountSum()) {checkVal = false;}
 
     if(not checkVal)
     {
@@ -129,8 +129,8 @@ bool checkForConsistentGridStructure(const SCC::GridFunction2d& uniformG, const 
     std::string eMessage;
 
     bool checkVal = true;
-    if(uniformG.getXpanelCount() != G.getXpanelCount())    checkVal = false;
-    if(uniformG.getYpanelCount() != G.getZpanelCountSum()) checkVal = false;
+    if(uniformG.getXpanelCount() != G.getXpanelCount())    {checkVal = false;}
+    if(uniformG.getYpanelCount() != G.getZpanelCountSum()) {checkVal = false;}
 
 
     if(not checkVal)
@@ -153,9 +153,9 @@ bool checkForConsistentGridStructure(const SCC::GridFunction3d& uniformG, const 
     std::string eMessage;
 
     bool checkVal = true;
-    if(uniformG.getXpanelCount() != G.getXpanelCount())    checkVal = false;
-    if(uniformG.getYpanelCount() != G.getYpanelCount())    checkVal = false;
-    if(uniformG.getZpanelCount() != G.getZpanelCountSum()) checkVal = false;
+    if(uniformG.getXpanelCount() != G.getXpanelCount())    {checkVal = false;}
+    if(uniformG.getYpanelCount() != G.getYpanelCount())    {checkVal = false;}
+    if(uniformG.getZpanelCount() != G.getZpanelCountSum()) {checkVal = false;}
 
 
     if(not checkVal)
