@@ -435,7 +435,6 @@ VLayeredGridFun2d operator-(const VLayeredGridFun2d& M)
 
 void operator-=(const VLayeredGridFun2d& M)
 {
-    VLayeredGridFun2d R(M);
     for(long i = 0; i < layerCount; i++)
     {
     layer[i] -= M.layer[i];
@@ -444,7 +443,6 @@ void operator-=(const VLayeredGridFun2d& M)
 
 void operator+=(const VLayeredGridFun2d& M)
 {
-    VLayeredGridFun2d R(M);
     for(long i = 0; i < layerCount; i++)
     {
     layer[i] += M.layer[i];
@@ -462,6 +460,14 @@ VLayeredGridFun2d operator+(const VLayeredGridFun2d& M)
 
 }
 
+void operator*=(const VLayeredGridFun2d& M)
+{
+    for(long i = 0; i < layerCount; i++)
+    {
+    layer[i] *= M.layer[i];
+    }
+}
+
 
 void operator*=(const std::function<double(double,double)>& F)
 {
@@ -470,6 +476,7 @@ void operator*=(const std::function<double(double,double)>& F)
     layer[i] *=F;
     }
 }
+
 
 void operator/=(const std::function<double(double,double)>& F)
 {
@@ -649,6 +656,28 @@ void scal(double alpha)
 double nrm2() const
 {
 	return std::sqrt(std::abs(this->dot(*this)));
+}
+
+void setBoundaryValues(double val)
+{
+	// Sides
+
+	for(long k = 0; k < layerCount; k++)
+	{
+		for(long j = 0; j <= zPanels[k]; j++)
+		{
+			layer[k](0,j)       = val;
+			layer[k](xPanels,j) = val;
+		}
+	}
+
+	// Top and bottom
+
+	for(long i = 0; i <= xPanels; i++)
+	{
+		layer[0](i,0)                                = val;
+		layer[layerCount-1](i,zPanels[layerCount-1]) = val;
+	}
 }
 
 

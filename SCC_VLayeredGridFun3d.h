@@ -656,6 +656,14 @@ void  operator*=(const double alpha)
     }
 }
 
+void operator*=(const VLayeredGridFun3d& M)
+{
+    for(long i = 0; i < layerCount; i++)
+    {
+    layer[i] *= M.layer[i];
+    }
+}
+
 VLayeredGridFun3d operator-(const VLayeredGridFun3d& M)
 {
     VLayeredGridFun3d R(M);
@@ -668,7 +676,6 @@ VLayeredGridFun3d operator-(const VLayeredGridFun3d& M)
 
 void operator-=(const VLayeredGridFun3d& M)
 {
-    VLayeredGridFun3d R(M);
     for(long i = 0; i < layerCount; i++)
     {
     layer[i] -= M.layer[i];
@@ -677,7 +684,6 @@ void operator-=(const VLayeredGridFun3d& M)
 
 void operator+=(const VLayeredGridFun3d& M)
 {
-    VLayeredGridFun3d R(M);
     for(long i = 0; i < layerCount; i++)
     {
     layer[i] += M.layer[i];
@@ -892,6 +898,43 @@ void enforceXYperiodicityAveraging()
     layer[i].enforceXYperiodicityAveraging();
     }
 }
+
+
+void setBoundaryValues(double val)
+{
+	// Sides
+
+	for(long Lindex = 0; Lindex < layerCount; Lindex++)
+	{
+		for(long k = 0; k <= zPanels[Lindex]; k++)
+		{
+			for(long i = 0; i <= xPanels; i++)
+			{
+			layer[Lindex](i,0,k)       = val;
+			layer[Lindex](i,yPanels,k) = val;
+			}
+
+			for(long j = 0; j <= yPanels; j++)
+			{
+			layer[Lindex](0,j,k)         = val;
+			layer[Lindex](xPanels,j,k)   = val;
+			}
+
+		}
+	}
+
+	// Top and bottom
+
+
+	for(long i = 0; i <= xPanels; i++)
+	{
+	for(long j = 0; j <= yPanels; j++)
+	{
+		layer[0](i,j,0)                                = val;
+		layer[layerCount-1](i,j,zPanels[layerCount-1]) = val;
+	}}
+}
+
 
 //
 //  Data Members

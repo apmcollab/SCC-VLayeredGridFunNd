@@ -68,7 +68,7 @@ class VLayeredGridFun2dUtility
 public:
 
 
-void outputToGNUplot(VLayeredGridFun2d& gF, const std::string& fileName, const std::string& formatString = "%20.15e")
+void outputToGNUplot(const VLayeredGridFun2d& gF, const std::string& fileName, const std::string& formatString = "%20.15e")
 {
     std::ostringstream s;
     s.str("");

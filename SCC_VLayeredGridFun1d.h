@@ -197,6 +197,12 @@ virtual bool isEqualStructure(const VLayeredGridFun1d& V) const
 }
 
 
+void setBoundaryValues(double val)
+{
+	setAboundaryValue(val);
+	setBboundaryValue(val);
+}
+
 inline double getAboundaryValue() const
 {
     return layer[0].operator()(0);
