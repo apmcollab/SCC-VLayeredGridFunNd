@@ -362,7 +362,6 @@ VLayeredGridFun1d operator-(const VLayeredGridFun1d& M)
 
 void operator-=(const VLayeredGridFun1d& M)
 {
-    VLayeredGridFun1d R(M);
     for(long i = 0; i < layerCount; i++)
     {
     layer[i] -= M.layer[i];
@@ -371,10 +370,17 @@ void operator-=(const VLayeredGridFun1d& M)
 
 void operator+=(const VLayeredGridFun1d& M)
 {
-    VLayeredGridFun1d R(M);
     for(long i = 0; i < layerCount; i++)
     {
     layer[i] += M.layer[i];
+    }
+}
+
+void operator*=(const VLayeredGridFun1d& M)
+{
+    for(long i = 0; i < layerCount; i++)
+    {
+    layer[i] *= M.layer[i];
     }
 }
 
@@ -432,22 +438,12 @@ void squareValues()
     }
 }
 //
-// Compute the inner product associated with ALL function values.
+// dot == scaled dot == sum of scaled dot products
+// of each layer SCC::GridFunction1d instance.
 //
 double dot(const VLayeredGridFun1d& M) const
 {
-    double d;
-    d = layer[0].dot(M.layer[0]);
-
-    // Weight each edge point by 1/2 to accommodate discontinuous functions
-
-    for(long i = 1; i < layerCount; i++)
-    {
-    d += layer[i].dot(M.layer[i]);
-    d -= 0.5*layer[i-1](layer[i-1].xPanels)*(M.layer[i-1](M.layer[i-1].xPanels));
-    d -= 0.5*layer[i](0)*(M.layer[i](0));
-    }
-    return d;
+    return scaledDot(M);
 }
 
 double scaledDot(const VLayeredGridFun1d& M) const

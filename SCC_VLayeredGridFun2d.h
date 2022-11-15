@@ -516,37 +516,12 @@ void squareValues()
 }
 
 //
-// Unscaled inner product associated with ALL function values.
+// dot == scaled dot == sum of scaled dot products
+// of each layer SCC::GridFunction1d instance.
 //
-// To avoid double counting and accommodate discontinuous functions
-// use average of values on the interior interface.
-//
-
 double dot(const VLayeredGridFun2d& M) const
 {
-    long i; long k;
-
-    double dotSum = 0.0;
-
-    // Double counts interior interface values
-
-    for(k = 0; k < layerCount; k++)
-    {
-    dotSum += layer[k].dot(M.layer[k]);
-    }
-
-    // Subtract off average of interior interface value
-
-    for(k = 0; k < layerCount-1; k++)
-    {
-        for(i = 0; i <= xPanels; i++)
-        {
-         dotSum -= 0.5*layer[k](i,zPanels[k])*(M.layer[k](i,zPanels[k]));
-         dotSum -= 0.5*layer[k+1](i,0)*(M.layer[k+1](i,0));
-        }
-    }
-
-    return dotSum;
+    return scaledDot(M);
 }
 
 
