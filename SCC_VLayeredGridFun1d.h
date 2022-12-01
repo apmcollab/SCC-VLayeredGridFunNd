@@ -562,6 +562,13 @@ double nrm2() const
 	return std::sqrt(std::abs(this->dot(*this)));
 }
 
+bool isNull() const
+{
+	if(layerCount == 0) {return true;}
+	return false;
+}
+
+
 //
 //  Data Members
 //

@@ -680,7 +680,11 @@ void setBoundaryValues(double val)
 	}
 }
 
-
+bool isNull() const
+{
+	if(layerCount == 0) {return true;}
+	return false;
+}
 //
 //  Data Members
 //
