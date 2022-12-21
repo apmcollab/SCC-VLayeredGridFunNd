@@ -60,7 +60,7 @@ bool identicalHz(const SCC::VLayeredGridFun1d& V)
     double hz = V.layer[0].getHx();
     for(long i = 0; i < V.getLayerCount(); i++)
     {
-    	if(std::abs(hz - V.layer[i].getHx()) > 1.0e-14*hz){return false;}
+    	if(std::abs(hz - V.layer[i].getHx()) > 1.0e-12*hz){return false;}
     }
     return true;
 }
@@ -70,7 +70,7 @@ bool identicalHz(const SCC::VLayeredGridFun2d& V)
     double hz = V.layer[0].getHy();
     for(long i = 0; i < V.getLayerCount(); i++)
     {
-    	if(std::abs(hz - V.layer[i].getHy()) > 1.0e-14*hz){return false;}
+    	if(std::abs(hz - V.layer[i].getHy()) > 1.0e-12*hz){return false;}
     }
     return true;
 }
@@ -80,7 +80,7 @@ bool identicalHz(const SCC::VLayeredGridFun3d& V)
     double hz = V.layer[0].getHz();
     for(long i = 0; i < V.getLayerCount(); i++)
     {
-    	if(std::abs(hz - V.layer[i].getHz()) > 1.0e-14*hz){return false;}
+    	if(std::abs(hz - V.layer[i].getHz()) > 1.0e-12*hz){return false;}
     }
     return true;
 }
