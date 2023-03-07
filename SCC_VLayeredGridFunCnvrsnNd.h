@@ -420,6 +420,64 @@ void insertUniformGridFunction3d(const SCC::GridFunction3d& uniformGrid, SCC::VL
 }
 
 
+void insertVLayeredGridFun3d(const SCC::VLayeredGridFun3d& V, SCC::GridFunction3d& uniformGrid)
+{
+    if(not checkForConsistentGridStructure(uniformGrid,V))
+    {
+    	throw std::runtime_error("\n Insertion of uniform grid function into layered grid function failed \n");
+    }
+
+
+	long zIndex = 0;
+	long zIndexStart;
+
+	long i; long j; long k; long p;
+
+	// First layer
+
+	for(i = 0; i <= V.xPanels; i++)
+	{
+	for(j = 0; j <= V.yPanels; j++)
+	{
+		zIndex = 0;
+		for(k = 0; k <=  V.zPanels[0]; k++)
+		{
+        	uniformGrid(i,j,zIndex) = V.layer[0](i,j,k);
+        	zIndex++;
+		}
+	}}
+
+	zIndexStart = zIndex - 1;
+
+
+	// Remaining layers
+	//
+    // Average interface values at interior interfaces
+
+	for(p = 1; p < V.getLayerCount(); p++)
+	{
+		for(i = 0; i <= V.xPanels; i++)
+		{
+	    for(j = 0; j <= V.yPanels; j++)
+		{
+	    	zIndex = zIndexStart;
+
+	    	uniformGrid(i,j,zIndex) = 0.5*(V.layer[p-1](i,j,V.zPanels[p-1]) + V.layer[p](i,j,0));
+
+        	zIndex++;
+
+        	for(k = 1; k <= V.zPanels[p]; k++)
+        	{
+        		uniformGrid(i,j,zIndex) = V.layer[p](i,j,k);
+        		zIndex++;
+        	}
+        }}
+
+		zIndexStart = zIndex - 1;
+      }
+
+}
+
 };
 
 }
