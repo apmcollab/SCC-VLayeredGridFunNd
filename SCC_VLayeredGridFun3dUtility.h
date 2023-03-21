@@ -783,6 +783,22 @@ void inputFromBinaryDataFile(SCC::VLayeredGridFun3d& gF, const std::string& file
 }
 
 
+void getVerticalIntegral(SCC::VLayeredGridFun3d& gF,SCC::GridFunction2d& vIntegral) const
+{
+	SCC::VLayeredGridFun1d        gF_Z;
+
+	gF_Z.initialize(gF.getConstantXYslice(0,0));
+	vIntegral.initialize(gF.getConstantZslice(0,0));
+
+	for(long i = 0; i <= gF.getXpanelCount(); i++)
+	{
+	for(long j = 0; j <= gF.getYpanelCount(); j++)
+	{
+	gF.getConstantXYslice(i,j,gF_Z);
+	vIntegral(i,j) = gF_Z.integral();
+	}}
+}
+
 //////////////////////////////////////////////////////////////////
 //           Data members
 /////////////////////////////////////////////////////////////////
