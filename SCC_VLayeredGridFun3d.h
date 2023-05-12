@@ -808,12 +808,25 @@ double norm2() const
 
 // The required integral is approximated using the Trapezoidal method
 
-double  integral() const
+double integral() const
 {
     double intVal = 0.0;
     for(long i = 0; i < layerCount; i++)
     {
     intVal += layer[i].integralTrapezoidal();
+    }
+    return intVal;
+}
+
+//
+// Integral of F( grid function values )
+//
+double integral(std::function<double(double)> F) const
+{
+	double intVal = 0.0;
+    for(long i = 0; i < layerCount; i++)
+    {
+    intVal += layer[i].integralTrapezoidal(F);
     }
     return intVal;
 }
