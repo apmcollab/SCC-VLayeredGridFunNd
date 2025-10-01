@@ -53,6 +53,7 @@
 #include <cstdio>
 #include <cstring>
 #include <vector>
+#include <cstdint>
 
 #include "SCC_VLayeredGridFun2d.h"
 

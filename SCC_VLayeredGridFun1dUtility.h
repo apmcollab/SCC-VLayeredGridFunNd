@@ -33,6 +33,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
+#include <cstdint>
 
 
 #include "GridFunctionNd/SCC_GridFunction1d.h"
