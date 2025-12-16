@@ -41,6 +41,9 @@ public:
 	VLayeredGridFun3dVec(const VLayeredGridFun3dVec& V) : VLayeredGridFun3d(V)
 	{}
 
+	VLayeredGridFun3dVec(const VLayeredGridFun3d& V) : VLayeredGridFun3d(V)
+	{}
+
 	VLayeredGridFun3dVec(long xPanels, double xMin, double xMax,long yPanels,double yMin, double yMax,
 	long zLayerCount, std::vector<long> zPanels, std::vector<double> zBdrys)
 	: VLayeredGridFun3d(xPanels,xMin,xMax,yPanels,yMin,yMax,zLayerCount, zPanels, zBdrys){}
