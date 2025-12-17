@@ -16,11 +16,11 @@
 //	RandOpBC3d::NONE      ==> sets grid boundary values to be random values (no boundary constraint)
 //
 //
-#ifndef RAND_OP_BC_VLG_3D_
-#define RAND_OP_BC_VLG_3D_
-
 #include "SCC_VLayeredGridFun3d.h"
 #include "RandOpNd/RandOpBC3d.h"
+
+#ifndef RAND_OP_BC_VLG_3D_
+#define RAND_OP_BC_VLG_3D_
 
 namespace SCC
 {
