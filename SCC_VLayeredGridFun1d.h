@@ -195,6 +195,23 @@ virtual bool isEqualStructure(const VLayeredGridFun1d& V) const
 
     return true;
 }
+//
+// Two layer structures are equal if they have the same number of
+// layers and each layer is the same width.
+//
+virtual bool isEqualLayerStructure(const VLayeredGridFun1d& V) const
+{
+    if((layer.size() == 0)&&(V.layer.size() != 0))       return false;
+    if(layerCount != V.layerCount)                       return false;
+
+    for(long i = 0; i < layerCount; i++)
+    {
+    if(std::abs(zWidth[i] - V.zWidth[i]) > 1.0e-012*std::abs(zWidth[i])){return false;}
+    }
+
+    return true;
+}
+
 
 
 void setBoundaryValues(double val)

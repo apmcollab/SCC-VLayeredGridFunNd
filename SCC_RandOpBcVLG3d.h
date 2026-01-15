@@ -28,10 +28,12 @@ class RandOpBcVLG3d
 {
     public :
 
+    enum {DIRICHLET,PERIODIC,NONE}; // Enumeration consistent between all RandOpBCNd classes
+
 	RandOpBcVLG3d(bool continuityFlag = true,
-	int  X_BC = RandOpBC3d::DIRICHLET,
-	int  Y_BC = RandOpBC3d::DIRICHLET,
-	int  Z_BC = RandOpBC3d::DIRICHLET)
+	int  X_BC = RandOpBcVLG3d::DIRICHLET,
+	int  Y_BC = RandOpBcVLG3d::DIRICHLET,
+	int  Z_BC = RandOpBcVLG3d::DIRICHLET)
 	{
 	initialize(continuityFlag,X_BC,Y_BC,Z_BC);
 	}
@@ -43,19 +45,19 @@ class RandOpBcVLG3d
 		this->Y_BC           = R.Y_BC;
 		this->Z_BC           = R.Z_BC;
 
-		this->randOpBC3d.initialize(X_BC,Y_BC,RandOpBC3d::NONE);
+		this->randOpBC3d.initialize(X_BC,Y_BC,RandOpBcVLG3d::NONE);
 	}
 
 	void initialize(bool continuityFlag = true,
-	int  X_BC = RandOpBC3d::DIRICHLET,
-	int  Y_BC = RandOpBC3d::DIRICHLET,
-	int  Z_BC = RandOpBC3d::DIRICHLET)
+	int  X_BC = RandOpBcVLG3d::DIRICHLET,
+	int  Y_BC = RandOpBcVLG3d::DIRICHLET,
+	int  Z_BC = RandOpBcVLG3d::DIRICHLET)
 	{
 		this-> X_BC = X_BC;
 		this-> Y_BC = Y_BC;
 		this-> Z_BC = Z_BC;
 
-		this->randOpBC3d.initialize(X_BC,Y_BC,RandOpBC3d::NONE);
+		this->randOpBC3d.initialize(X_BC,Y_BC,RandOpBcVLG3d::NONE);
 
 		this->continuityFlag = continuityFlag;
 	}
@@ -69,36 +71,36 @@ class RandOpBcVLG3d
     	{
     	randOpBC3d.randomize(v.layer[k]);
 
-        if(X_BC == RandOpBC3d::DIRICHLET) {v.layer[k].setXboundaryValues(0.0);}
-		if(Y_BC == RandOpBC3d::DIRICHLET) {v.layer[k].setYboundaryValues(0.0);}
+        if(X_BC == RandOpBcVLG3d::DIRICHLET) {v.layer[k].setXboundaryValues(0.0);}
+		if(Y_BC == RandOpBcVLG3d::DIRICHLET) {v.layer[k].setYboundaryValues(0.0);}
 
-		if(X_BC == RandOpBC3d::PERIODIC) {v.layer[k].enforceXperiodicity();}
-		if(Y_BC == RandOpBC3d::PERIODIC) {v.layer[k].enforceYperiodicity();}
+		if(X_BC == RandOpBcVLG3d::PERIODIC) {v.layer[k].enforceXperiodicity();}
+		if(Y_BC == RandOpBcVLG3d::PERIODIC) {v.layer[k].enforceYperiodicity();}
     	}
 
     	long zPanels;
     	long xPanels    = v.getXpanelCount();
     	long yPanels    = v.getYpanelCount();
 
-    	if(Z_BC == RandOpBC3d::DIRICHLET)
+    	if(Z_BC == RandOpBcVLG3d::DIRICHLET)
         {
+    		zPanels  = v.layer[layerCount-1].zPanels;
         	for(long i = 0; i <= xPanels; i++)
     		{
     		for(long j = 0; j <= yPanels; j++)
     		{
     			v.layer[0](i,j,0) = 0.0;
-    			zPanels  = v.layer[layerCount-1].zPanels;
     			v.layer[layerCount-1](i,j,zPanels) = 0.0;
     		}}
         }
-
-        if(Z_BC == RandOpBC3d::PERIODIC)
+    	else if(Z_BC == RandOpBcVLG3d::PERIODIC)
         {
+    		zPanels  = v.layer[layerCount-1].zPanels;
         	for(long i = 0; i <= xPanels; i++)
     		{
     		for(long j = 0; j <= yPanels; j++)
     		{
-    			zPanels                            = v.layer[layerCount-1].zPanels;
+
     			v.layer[layerCount-1](i,j,zPanels) = v.layer[0](i,j,0);
     		}}
         }
@@ -109,11 +111,11 @@ class RandOpBcVLG3d
     	{
     		for(long k = 1; k <= v.getLayerCount()-1; k++)
     		{
+    			zPanels             = v.layer[k-1].zPanels;
     			for(long i = 0; i <= xPanels; i++)
     			{
     			for(long j = 0; j <= yPanels; j++)
     			{
-    			zPanels             = v.layer[k-1].zPanels;
     			v.layer[k](i,j,0)   = v.layer[k-1](i,j,zPanels);
     			}}
     		}

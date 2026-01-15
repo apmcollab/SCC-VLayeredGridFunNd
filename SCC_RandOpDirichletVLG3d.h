@@ -58,11 +58,11 @@ class RandOpDirichletVLG3d
     	{
     		for(long k = 1; k <= v.getLayerCount()-1; k++)
     		{
+    			 zPanels             = v.layer[k-1].zPanels;
     			for(long i = 0; i <= xPanels; i++)
     			{
     			for(long j = 0; j <= yPanels; j++)
     			{
-    			zPanels             = v.layer[k-1].zPanels;
     			v.layer[k](i,j,0)   = v.layer[k-1](i,j,zPanels);
     			}}
     		}
