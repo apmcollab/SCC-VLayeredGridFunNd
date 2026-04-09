@@ -680,6 +680,29 @@ void setBoundaryValues(double val)
 	}
 }
 
+//
+// Sets the values on the interface between two layers to be the
+// average of the interface values for each layer.
+//
+void enforceInterfaceContinuity()
+{
+	long zLayerPanels;
+	long xPanels = getXpanelCount();
+
+	double avgValue;
+
+	for(long k = 1; k <= getLayerCount()-1; k++)
+	{
+		zLayerPanels  = layer[k-1].yPanels;
+		for(long i = 0; i <= xPanels; i++)
+		{
+			avgValue = (layer[k](i,0)  + layer[k-1](i,zLayerPanels))/2.0;
+			layer[k](i,0)              = avgValue;
+			layer[k-1](i,zLayerPanels) = avgValue;
+    	}
+    }
+}
+
 bool isNull() const
 {
 	if(layerCount == 0) {return true;}

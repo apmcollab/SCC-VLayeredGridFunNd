@@ -585,6 +585,20 @@ bool isNull() const
 	return false;
 }
 
+void enforceInterfaceContinuity()
+{
+	long   xLayerPanels;
+	double avgValue;
+
+	for(long k = 1; k <= getLayerCount()-1; k++)
+	{
+		xLayerPanels  = layer[k-1].xPanels;
+        avgValue = (layer[k](0)  + layer[k-1](xLayerPanels))/2.0;
+	    layer[k](0)         = avgValue;
+		layer[k-1](xLayerPanels) = avgValue;
+    }
+}
+
 
 //
 //  Data Members

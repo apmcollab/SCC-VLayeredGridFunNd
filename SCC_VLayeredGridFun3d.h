@@ -912,6 +912,32 @@ void enforceXYperiodicityAveraging()
     }
 }
 
+//
+// Sets the values on the interface between two layers to be the
+// average of the interface values for each layer.
+//
+void enforceInterfaceContinuity()
+{
+	long zLayerPanels;
+	long xPanels = getXpanelCount();
+	long yPanels = getYpanelCount();
+
+	double avgValue;
+
+	for(long k = 1; k <= getLayerCount()-1; k++)
+	{
+		zLayerPanels  = layer[k-1].zPanels;
+		for(long i = 0; i <= xPanels; i++)
+		{
+		for(long j = 0; j <= yPanels; j++)
+    	{
+			avgValue = (layer[k](i,j,0)  + layer[k-1](i,j,zLayerPanels))/2.0;
+			layer[k](i,j,0)              = avgValue;
+			layer[k-1](i,j,zLayerPanels) = avgValue;
+    	}}
+    }
+}
+
 
 void setBoundaryValues(double val)
 {
