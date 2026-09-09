@@ -360,6 +360,52 @@ void createLayeredGridFunction(const  SCC::GridFunction3d& G, SCC::VLayeredGridF
     V.layer[0].initialize(G);
 }
 
+// Copies the values from a uniform grid function to an
+// existing vertically layered grid function.
+
+void copyGridFunctionToLayeredGridFun(const  SCC::GridFunction3d& G, SCC::VLayeredGridFun3d& V)
+{
+		checkForConsistentGridStructure(G, V);
+
+
+		SCC::GridFunction1d        zSlice;
+		SCC::VLayeredGridFun1d  vlgZslice;
+
+		long xPanels    = V.getXpanelCount();
+		long yPanels    = V.getYpanelCount();
+		long layerCount = V.getLayerCount();
+
+		long zPanels;
+		long  zCount;
+
+		V.setToValue(0.0);
+
+		for(long i = 0; i <= xPanels; i++)
+		{
+		for(long j = 0; j <= yPanels; j++)
+		{
+			zCount    = 0;
+			zSlice    = G.getConstantXYslice(i, j);
+			vlgZslice = V.getConstantXYslice(i, j);
+
+			for(long layerIndex = 0; layerIndex < layerCount; layerIndex++)
+			{
+				zPanels = vlgZslice.layer[layerIndex].getXpanelCount();
+
+				for(long k = 0; k <= zPanels; k++)
+				{
+				vlgZslice.layer[layerIndex](k) = zSlice(zCount);
+				zCount += 1;
+				}
+				if(layerIndex < layerCount-1)
+				{
+				zCount -= 1;
+				}
+			}
+
+			V.setConstantXYslice(i, j, vlgZslice);
+		}}
+}
 
 void insertUniformGridFunction3d(const SCC::GridFunction3d& uniformGrid, SCC::VLayeredGridFun3d& V)
 {
