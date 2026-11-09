@@ -711,7 +711,7 @@ void inputFromBinaryDataFile(SCC::VLayeredGridFun3d& gF, FILE* dataFile, std::st
 
 	zPanels64.resize(layerCount);
 
-	rValue = fread(&zPanels64[0],  sizeof(std::int64_t), layerCount, dataFile) != (unsigned int) layerCount ? 0 : rValue;
+	rValue = fread(&zPanels64[0],  sizeof(std::int64_t), layerCount, dataFile) != (unsigned int) layerCount ? 1 : rValue;
 
 	zPanels.resize(layerCount);
 
